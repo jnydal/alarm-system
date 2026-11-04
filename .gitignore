@@ -1,0 +1,8 @@
+# Local settings and credentials
+firmware/config.py
+firmware/camera/camera_secrets.py
+
+# Downloaded firmware images
+*.bin
+
+__pycache__/
