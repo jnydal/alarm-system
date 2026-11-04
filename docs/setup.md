@@ -29,6 +29,17 @@ If the board isn't detected, hold BOOT, tap RESET, then release BOOT, and try ag
 
 **Prepare the SD card.** Format it as FAT32 and copy your alarm sound to the root as `0001.mp3`. Keep it the only file on the card, because the module picks tracks by their position on the card, not by name. Insert the card before powering on.
 
+**Wire the MP3 module.** Unplug the board first, then connect:
+
+| MP3 module | ESP32-C3 |
+|---|---|
+| VCC | 5V (some modules accept 3.3 V, so check yours) |
+| GND | G |
+| RX | GPIO21, through a 1 kΩ resistor |
+| TX | GPIO20 |
+
+RX and TX cross over: the module's RX receives from the board's transmit pin (GPIO21), and its TX sends to the board's receive pin (GPIO20). Connect the speaker to the module's SPK+ / SPK- terminal, which may be labeled SPK_1 / SPK_2. Plug the board back in when you're done.
+
 **Copy the code and read the MAC address:**
 
 ```powershell
@@ -40,7 +51,18 @@ The unit prints its MAC address every 10 seconds. Put it in `ALARM_MAC` in `firm
 
 ## 4. Set up the sensor unit
 
-Flash MicroPython the same way as in step 3, then copy the code:
+Flash MicroPython the same way as in step 3.
+
+**Wire the reed switch.** Unplug the board first, then connect:
+
+| Reed switch | ESP32-C3 |
+|---|---|
+| Leg 1 | GPIO3 |
+| Leg 2 | G |
+
+The legs are interchangeable, and no external resistor is needed because the code uses the chip's internal pull-up. Plug the board back in when you're done.
+
+**Copy the code:**
 
 ```powershell
 py -m mpremote connect COM5 cp firmware/config.py firmware/common/door_link.py firmware/sensor/main.py : + reset
