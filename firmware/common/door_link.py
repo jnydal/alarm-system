@@ -19,8 +19,8 @@ def format_mac(mac):
 def start_station(channel=None):
     """Activate the WiFi station interface, optionally fixing its channel.
 
-    Pass a channel on units that never join a router. A unit that joins a
-    router has to use the router's channel instead.
+    A unit that joins a router afterwards moves to the router's channel, so
+    the channel passed here only applies until then.
     """
     sta = network.WLAN(network.STA_IF)
     sta.active(True)

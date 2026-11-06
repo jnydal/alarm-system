@@ -1,22 +1,21 @@
 # DIY Door Alarm
 
-A wireless door alarm written in MicroPython. A sensor unit on the door tells a separate alarm unit to play a sound through a speaker. An optional camera unit emails you a snapshot each time the door opens.
+A door alarm written in MicroPython. A camera unit near the door reads a reed switch on the door, tells a separate alarm unit to play a sound through a speaker, and emails you a snapshot.
 
-The units talk directly over ESP-NOW, so the alarm works without a router or internet connection. Only the camera unit needs WiFi, to send its email.
+The two units talk directly over ESP-NOW, so the alarm itself doesn't depend on the internet. Only the email needs WiFi.
 
 ```
-                                     +--ESP-NOW--> [ESP32-C3 alarm] --UART--> [MP3 module] --> [speaker]
-[door] --reed switch--> [ESP32-C3 sensor]
-                                     +--ESP-NOW--> [ESP32-CAM camera] --WiFi/SMTP--> [your inbox]
+[door] --reed switch, 3 m cable--> [ESP32-CAM camera] --ESP-NOW--> [ESP32-C3 alarm] --UART--> [MP3 module] --> [speaker]
+                                           |
+                                           +--WiFi/SMTP--> [your inbox]
 ```
 
 | Unit | Board | Job |
 |---|---|---|
-| Sensor | ESP32-C3 SuperMini | Watches the reed switch and sends door events |
+| Camera | AI-Thinker ESP32-CAM | Watches the reed switch, sends door events to the alarm, emails a photo when the door opens |
 | Alarm | ESP32-C3 SuperMini | Plays the sound while the door is open |
-| Camera (optional) | AI-Thinker ESP32-CAM | Emails a photo when the door opens |
 
-The camera has its own board because the ESP32-C3 has no camera interface.
+Door events go to the alarm before the photo is taken. If the camera or WiFi fails, the camera unit keeps working as a door sensor without photos.
 
 ## Getting started
 
@@ -28,24 +27,24 @@ The camera has its own board because the ESP32-C3 has no camera interface.
 
 ```
 firmware/
-  config.example.py     Template for config.py: MAC addresses and channel
-  common/door_link.py   ESP-NOW helpers and message format, used by every unit
-  sensor/main.py        Sensor unit
+  config.example.py     Template for config.py: alarm MAC address and channel
+  common/door_link.py   ESP-NOW helpers and message format, used by both units
   alarm/main.py         Alarm unit
   alarm/dfplayer.py     MP3 module driver
   camera/main.py        Camera unit
   camera/smtp_mail.py   Sends the email
+  camera/bmp.py         Converts camera frames to BMP images
   camera/camera_secrets.example.py   Template for WiFi and email credentials
+tools/camup.py          Copies files to the ESP32-CAM where mpremote can't
 docs/                   Hardware, setup and troubleshooting guides
 prototype-draft/        The original design document
 ```
 
 ## Possible extensions
 
-- Several sensor units, one per door or window, reporting to one alarm unit
+- More reed switches on the camera unit's free pins, such as GPIO14, for other doors or windows
 - A silence or disarm button on the alarm unit
 - Phone notifications or remote control over WiFi and MQTT or HTTP
-- Saving snapshots to the camera unit's microSD card as a backup to email
+- Saving snapshots to the camera unit's microSD card as a backup to email. This would need the reed switch moved off GPIO13, which the card uses.
 - Short video clips instead of a single photo, within your email provider's attachment limit
 - A cooldown so that repeated door events don't each send an email
-- Deep sleep with wake-on-pin on the sensor unit for longer battery life

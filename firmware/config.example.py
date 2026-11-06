@@ -3,13 +3,7 @@
 # Printed by the alarm unit over USB once it is running.
 ALARM_MAC = "00:00:00:00:00:00"
 
-# The channel the sensor and alarm units stay on. Without the camera unit, any
-# channel from 1 to 13 works. With it, this must equal your router's channel,
-# which the camera unit prints when it connects.
+# The channel the alarm unit stays on. It must equal your router's channel,
+# because the camera unit follows the router once it joins WiFi. The camera
+# unit prints the router's channel when it connects.
 ESPNOW_CHANNEL = 1
-
-# Set to True to make the sensor unit also notify the camera unit.
-CAMERA_ENABLED = False
-
-# Printed by the camera unit once it is running.
-CAMERA_MAC = "00:00:00:00:00:00"
