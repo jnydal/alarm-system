@@ -99,7 +99,7 @@ Check the release notes in case they give a different flash offset. Then remove 
 **4. Copy the code and read the radio details:**
 
 ```powershell
-py -m mpremote connect COM6 cp firmware/config.py firmware/common/door_link.py firmware/camera/camera_secrets.py firmware/camera/smtp_mail.py firmware/camera/main.py : + reset
+py -m mpremote connect COM6 cp firmware/config.py firmware/common/door_link.py firmware/camera/camera_secrets.py firmware/camera/smtp_mail.py firmware/camera/bmp.py firmware/camera/main.py : + reset
 py -m mpremote connect COM6 repl
 ```
 

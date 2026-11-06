@@ -1,4 +1,4 @@
-"""Send one email with a JPEG attachment over SMTP on an implicit-TLS port."""
+"""Send one email with an image attachment over SMTP on an implicit-TLS port."""
 
 import binascii
 import socket
@@ -43,7 +43,7 @@ def _write_base64(sock, data):
         sock.write(pending)
 
 
-def _headers(sender, recipient, subject, body, filename):
+def _headers(sender, recipient, subject, body, filename, content_type):
     lines = (
         "From: Door Alarm <{}>".format(sender),
         "To: {}".format(recipient),
@@ -57,7 +57,7 @@ def _headers(sender, recipient, subject, body, filename):
         body,
         "",
         "--{}".format(BOUNDARY),
-        'Content-Type: image/jpeg; name="{}"'.format(filename),
+        'Content-Type: {}; name="{}"'.format(content_type, filename),
         'Content-Disposition: attachment; filename="{}"'.format(filename),
         "Content-Transfer-Encoding: base64",
         "",
@@ -66,7 +66,9 @@ def _headers(sender, recipient, subject, body, filename):
     return "\r\n".join(lines).encode()
 
 
-def send_jpeg(host, port, sender, password, recipient, subject, body, jpeg, filename):
+def send_image(
+    host, port, sender, password, recipient, subject, body, image, filename, content_type
+):
     """Send the email. Raises OSError if the server refuses or the link fails."""
     address = socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM)[0][-1]
     raw = socket.socket()
@@ -84,8 +86,8 @@ def send_jpeg(host, port, sender, password, recipient, subject, body, jpeg, file
         _command(sock, "RCPT TO:<{}>".format(recipient).encode(), 250)
         _command(sock, b"DATA", 354)
 
-        sock.write(_headers(sender, recipient, subject, body, filename))
-        _write_base64(sock, jpeg)
+        sock.write(_headers(sender, recipient, subject, body, filename, content_type))
+        _write_base64(sock, image)
         sock.write("\r\n--{}--\r\n".format(BOUNDARY).encode())
         _command(sock, b".", 250)
 
