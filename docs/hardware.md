@@ -6,7 +6,7 @@
 
 Watches the door through the reed switch, tells the alarm unit, and emails a photo.
 
-- AI-Thinker ESP32-CAM with OV2640 camera. The MicroPython camera driver requires a board with PSRAM, which this one has.
+- AI-Thinker ESP32-CAM. The code is set up for the OV3660 camera sensor this one came with: it captures uncompressed frames because the OV3660's JPEG mode doesn't work with the firmware, and flips the picture because the sensor sits upside down. With an OV2640, adjust `FLIP_VERTICAL` and `MIRROR_HORIZONTAL` in [camera/main.py](../firmware/camera/main.py). The MicroPython camera driver requires a board with PSRAM, which this one has.
 - USB-to-serial (FTDI) adapter, because the board has no USB port of its own
 - 5 V / 2 A power supply. Camera and WiFi together draw more than the alarm unit.
 - Magnetic reed switch (door/window type)
@@ -22,7 +22,7 @@ ESP-NOW packets are limited to about 250 bytes, too small for a photo. That is w
 ### Alarm unit
 
 - ESP32-C3 SuperMini (16-pin, USB-C)
-- UART MP3 player module with an onboard mono amplifier and speaker terminal. It must use the DFPlayer Mini command set, so check the seller's specification.
+- UART MP3 player module with an onboard mono amplifier and speaker terminal, such as the Open-Smart UART MP3 module v1.1. It must use the DFPlayer Mini command set, so check the seller's specification. The Open-Smart v1.1 does.
 - microSD card, formatted as FAT32
 - Speaker, 3 W at 4 Ω or 8 Ω. Check your module's amplifier rating; many are similar to the DFPlayer Mini at about 3 W into 4 Ω.
 - 1 kΩ resistor for the module's RX line
@@ -84,7 +84,7 @@ To flash firmware, also connect **GPIO0 to GND** before powering on. Remove that
 |---|---|
 | VCC | 5V (some modules accept 3.3 V, so check yours) |
 | GND | G |
-| RX | GPIO21, through the 1 kΩ resistor |
-| TX | GPIO20 |
+| RX | GPIO3, through the 1 kΩ resistor |
+| TX | GPIO4 |
 
 Connect the speaker to the module's SPK+ / SPK- terminal, which may be labeled SPK_1 / SPK_2.

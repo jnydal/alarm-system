@@ -38,10 +38,10 @@ If the board isn't detected, hold BOOT, tap RESET, then release BOOT, and try ag
 |---|---|
 | VCC | 5V (some modules accept 3.3 V, so check yours) |
 | GND | G |
-| RX | GPIO21, through a 1 kΩ resistor |
-| TX | GPIO20 |
+| RX | GPIO3, through a 1 kΩ resistor |
+| TX | GPIO4 |
 
-RX and TX cross over: the module's RX receives from the board's transmit pin (GPIO21), and its TX sends to the board's receive pin (GPIO20). Connect the speaker to the module's SPK+ / SPK- terminal, which may be labeled SPK_1 / SPK_2. Plug the board back in when you're done.
+RX and TX cross over: the module's RX receives from the board's transmit pin (GPIO3), and its TX sends to the board's receive pin (GPIO4). Connect the speaker to the module's SPK+ / SPK- terminal, which may be labeled SPK_1 / SPK_2. Plug the board back in when you're done.
 
 **Copy the code and read the MAC address:**
 

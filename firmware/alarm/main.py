@@ -8,8 +8,8 @@ import config
 import door_link
 from dfplayer import DFPlayer
 
-MP3_RX_PIN = 20
-MP3_TX_PIN = 21
+MP3_RX_PIN = 4
+MP3_TX_PIN = 3
 MP3_BAUD = 9600
 MP3_STARTUP_MS = 1500  # the module ignores commands until it has read the card
 VOLUME = 25  # 0 to 30
